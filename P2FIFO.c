@@ -11,25 +11,20 @@
 
 
 int main() {
-    int F_A, F_B;
-
-    int RESULT;
+	///////////////////////////////////////////////////////////////////////
+    int F_A, F_B, RESULT;
     char BUFFER[SIZE];
 	int MAXIMUM_INDEX = 0;
-    // FIFO file path
-    char * FIFO_File_Path_A = "FIFO1";
-    char * FIFO_File_Path_B = "FIFO2";
 
-    
-    // Creating the named file(FIFO)
-    // mkfifo(<pathname>, <permission>)
-    
+    char * FIFO_File_Path_A = "File_For_FIFO_1";
+    char * FIFO_File_Path_B = "File_For_FIFO_2";
+  
     mkfifo(FIFO_File_Path_A, 0666);
     mkfifo(FIFO_File_Path_B, 0666);
 
-
 	MAXIMUM_INDEX = 0;
 	int CURRENT_INDEX = MAXIMUM_INDEX;
+	///////////////////////////////////////////////////////////////////////
 	while(1) {
 		while(CURRENT_INDEX < MAXIMUM_INDEX + 5) {
 			sleep(2);
@@ -51,8 +46,8 @@ int main() {
 			sprintf(BUFFER, "%d", CURRENT_INDEX);
 			printf("String Index sent by P1FIFO   :    %s\n", BUFFER);	
 		}
-		//BUFFER contains the string with the 0th idx as the index of the string
-		
+	
+	///////////////////////////////////////////////////////////////////////	
 		MAXIMUM_INDEX = CURRENT_INDEX;
 		F_B = open(FIFO_File_Path_B, O_WRONLY);
 		RESULT = write(F_B, BUFFER, sizeof(BUFFER));

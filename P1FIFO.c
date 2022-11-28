@@ -28,8 +28,8 @@ int main() {
     int RESULT;
     char BUFFER[SIZE];
     // FIFO file path
-    char * FIFO_File_Path_A = "FIFO1";
-    char * FIFO_File_Path_B = "FIFO2";
+    char * FIFO_File_Path_A = "File_For_FIFO_1";
+    char * FIFO_File_Path_B = "File_For_FIFO_2";
     
     char Random_String_Generated[51][12] = {{0}};
 
