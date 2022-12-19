@@ -5,43 +5,43 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#define SOCKET "mySocket.socket"
-#define BUFFER 12
+#define NAME_OF_SOCKET "SOCKET_1.socket"
+#define SIZE 12
 
-int main(int argc, char *argv[]) {
-	struct sockaddr_un NAME_OF_SERVER;
+int main(int Argument_Count, char *Argument[]) {
+	struct sockaddr_un servername;
 	int FLAG = 0;
-	int Connection_Socket;
+	int CONNECTION_SOCKET;
 	int RESULT;
 	int MAX_INDEX = 0;
 	int DATA_SOCKET;
-	char BUFF[BUFFER];
+	char BUFF[SIZE];
 
-	Connection_Socket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
-	if(Connection_Socket == -1) {
+	CONNECTION_SOCKET = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+	if(CONNECTION_SOCKET == -1) {
 		perror("Socket couldn't be made");
 		exit(EXIT_FAILURE);
 	}
 
-	memset(&NAME_OF_SERVER, 0, sizeof(NAME_OF_SERVER));
-	NAME_OF_SERVER.sun_family = AF_UNIX;
-	strncpy(NAME_OF_SERVER.sun_path, SOCKET, sizeof(NAME_OF_SERVER.sun_path) - 1);
+	memset(&servername, 0, sizeof(servername));
+	servername.sun_family = AF_UNIX;
+	strncpy(servername.sun_path, NAME_OF_SOCKET, sizeof(servername.sun_path) - 1);
 
-	RESULT = bind(Connection_Socket, (const struct sockaddr *) &NAME_OF_SERVER, sizeof(NAME_OF_SERVER));
+	RESULT = bind(CONNECTION_SOCKET, (const struct sockaddr *) &servername, sizeof(servername));
 
 	if(RESULT == -1) {
 		perror("bind");
 		exit(EXIT_FAILURE);
 	}
 
-	RESULT = listen(Connection_Socket, 100);
+	RESULT = listen(CONNECTION_SOCKET, 100);
 	if(RESULT == -1) {
 		perror("listen");
 		exit(EXIT_FAILURE);
 	}
 
 	while(1) {
-		DATA_SOCKET = accept(Connection_Socket, NULL, NULL);
+		DATA_SOCKET = accept(CONNECTION_SOCKET, NULL, NULL);
 		if(DATA_SOCKET == -1) {
 			perror("couldn't accept");
 			exit(EXIT_FAILURE);
@@ -89,8 +89,8 @@ int main(int argc, char *argv[]) {
 
 		if(FLAG) {
 			printf("SHUTTING SERVER");
-			close(Connection_Socket);
-			unlink(SOCKET);
+			close(CONNECTION_SOCKET);
+			unlink(NAME_OF_SOCKET);
 			exit(EXIT_SUCCESS);
 			break;
 		}

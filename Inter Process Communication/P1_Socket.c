@@ -6,84 +6,80 @@
 #include<unistd.h>
 #include<time.h>
 
-#define SOCKET "socket1.socket"
-#define BUFFER_SIZE 10
+#define NAME_OF_SOCKET "SOCKET_1.socket"
+#define SIZE 10
 
-void Generate_Random_String(char Random_Strings[][12]) {        
+void GENERATE_RANDOM_STRING(char RANDOM_STRINGS[][12]) {        
     srand (time(NULL));                            
     for (int j = 0; j <= 50; j++) {
-        Random_Strings[j][0] = j;
+        RANDOM_STRINGS[j][0] = j;
     }
     
     for(int i = 0; i <= 50; i++) {
 		for(int j = 1; j <= 10; j++) {
-			Random_Strings[i][j] = rand() % 26 + 65;
+			RANDOM_STRINGS[i][j] = rand() % 26 + 65;
 		}
 	}
 }
 
 int main(int Argument_Count, char* Argument[]) {
-	struct sockaddr_un Socket_Address;
+	struct sockaddr_un addr;
 	int RESULT;
-	int DATA_SOCKETS;
-	char BUFF[BUFFER_SIZE];
+	int DATA_SOCKET;
+	char BUFF[SIZE];
 
 	//Creating data socket
-	DATA_SOCKETS = socket(AF_UNIX, SOCK_SEQPACKET, 0);
-	if(DATA_SOCKETS == -1) {
-		printf("--------------------------\n");
-		perror("UNABLE to create socket!!!");
-		printf("--------------------------\n");
+	DATA_SOCKET = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+	if(DATA_SOCKET == -1) {
+		perror("Couldn't create socket");
 		exit(EXIT_FAILURE);
 	}	
 
-	memset(&Socket_Address, 0, sizeof(Socket_Address));
+	memset(&addr, 0, sizeof(addr));
 
 	//For local connections
-	Socket_Address.sun_family = AF_UNIX;
-	strncpy(Socket_Address.sun_path, SOCKET, sizeof(Socket_Address.sun_path) - 1);
-	RESULT = connect(DATA_SOCKETS, (const struct sockaddr *) &Socket_Address, sizeof(Socket_Address));
+	addr.sun_family = AF_UNIX;
+	strncpy(addr.sun_path, NAME_OF_SOCKET, sizeof(addr.sun_path) - 1);
+	RESULT = connect(DATA_SOCKET, (const struct sockaddr *) &addr, sizeof(addr));
 
 	if(RESULT == -1) {
-		printf("----------------------------------\n");
-		perror("Server is not working currently!!!\n");
-		printf("----------------------------------\n");
+		perror("Server is down\n");
 		exit(EXIT_FAILURE);
 	}	
 
 	//Writing data
-	char Random_String[51][12] = {{0}};
-	Generate_Random_String(Random_String);
+	char RANDOM_STRING[51][12] = {{0}};
+	GENERATE_RANDOM_STRING(RANDOM_STRING);
 	
 	for(int i = 1; i <= 50; i++) {
 		for(int j = 0; j < 12; j++) {
 			if(j == 0) {
-				printf("%d ", Random_String[i][j]);
+				printf("%d ", RANDOM_STRING[i][j]);
 			}
-			else printf("%c", Random_String[i][j]);
+			else printf("%c", RANDOM_STRING[i][j]);
 		}
 		printf("\n");
 	}
 
 	if(Argument_Count > 1) {
 		strncpy(BUFF, "DOWN", sizeof("DOWN"));
-		write(DATA_SOCKETS, BUFF, sizeof(BUFF));
-		close(DATA_SOCKETS);
+		write(DATA_SOCKET, BUFF, sizeof(BUFF));
+		close(DATA_SOCKET);
 		exit(EXIT_SUCCESS);
 	}
 	else {
 		int LAST_INDEX = 1;
 		while(1) {
-			printf("Sending Strings Indexed from %d to %d\n", LAST_INDEX, LAST_INDEX + 4);
+			printf("sending Strings Indexed from %d to %d\n", LAST_INDEX, LAST_INDEX + 4);
 			for(int i = LAST_INDEX; i < LAST_INDEX + 5; i++) {
-				RESULT = write(DATA_SOCKETS, Random_String[i], strlen(Random_String[i]) + 1);
+				RESULT = write(DATA_SOCKET, RANDOM_STRING[i], strlen(RANDOM_STRING[i]) + 1);
 				if(RESULT == -1) {
 					perror("couldn't write");
 				}
 			}
 
 			//Reading Acknowledgements
-			RESULT = read(DATA_SOCKETS, BUFF, sizeof(BUFF));
+			RESULT = read(DATA_SOCKET, BUFF, sizeof(BUFF));
 			if(RESULT == -1) {
 				perror("read");
 				exit(EXIT_FAILURE);
@@ -94,13 +90,10 @@ int main(int Argument_Count, char* Argument[]) {
 			
 			printf("MAX ID SENT BACK BY SERVER = %s\n\n", BUFF);
 			if(FINAL_INDEX == 50) {
-				printf("--------------------------------------------------\n");
-				printf("| ALL STRINGS ARE SUCCESSSFULLY SENT BY PRODUCER |\n");
-				printf("--------------------------------------------------\n");
-				
+				printf("Successfully sent all Strings\n");
 				strncpy(BUFF, "DOWN", sizeof("DOWN"));
-				write(DATA_SOCKETS, BUFF, sizeof(BUFF));
-				close(DATA_SOCKETS);
+				write(DATA_SOCKET, BUFF, sizeof(BUFF));
+				close(DATA_SOCKET);
 				exit(EXIT_SUCCESS);
 				break;
 			}
