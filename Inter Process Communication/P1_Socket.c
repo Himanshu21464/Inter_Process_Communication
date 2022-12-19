@@ -6,7 +6,7 @@
 #include<unistd.h>
 #include<time.h>
 
-#define NAME_OF_SOCKET "SOCKET_1.socket"
+#define NAME_OF_SOCKET "Himanshu_2021464.socket"
 #define SIZE 10
 
 void GENERATE_RANDOM_STRING(char RANDOM_STRINGS[][12]) {        
@@ -23,7 +23,7 @@ void GENERATE_RANDOM_STRING(char RANDOM_STRINGS[][12]) {
 }
 
 int main(int Argument_Count, char* Argument[]) {
-	struct sockaddr_un addr;
+	struct sockaddr_un ADDRESS;
 	int RESULT;
 	int DATA_SOCKET;
 	char BUFF[SIZE];
@@ -31,19 +31,23 @@ int main(int Argument_Count, char* Argument[]) {
 	//Creating data socket
 	DATA_SOCKET = socket(AF_UNIX, SOCK_SEQPACKET, 0);
 	if(DATA_SOCKET == -1) {
-		perror("Couldn't create socket");
+		printf("--------------------------\n");
+		perror("UNABLE To Create Socket!!!\n");
+		printf("--------------------------\n");
 		exit(EXIT_FAILURE);
 	}	
 
-	memset(&addr, 0, sizeof(addr));
+	memset(&ADDRESS, 0, sizeof(ADDRESS));
 
 	//For local connections
-	addr.sun_family = AF_UNIX;
-	strncpy(addr.sun_path, NAME_OF_SOCKET, sizeof(addr.sun_path) - 1);
-	RESULT = connect(DATA_SOCKET, (const struct sockaddr *) &addr, sizeof(addr));
+	ADDRESS.sun_family = AF_UNIX;
+	strncpy(ADDRESS.sun_path, NAME_OF_SOCKET, sizeof(ADDRESS.sun_path) - 1);
+	RESULT = connect(DATA_SOCKET, (const struct sockaddr *) &ADDRESS, sizeof(ADDRESS));
 
 	if(RESULT == -1) {
-		perror("Server is down\n");
+		printf("---------------\n");
+		perror("| SERVER DOWN |\n");
+		printf("---------------\n");
 		exit(EXIT_FAILURE);
 	}	
 
@@ -70,11 +74,11 @@ int main(int Argument_Count, char* Argument[]) {
 	else {
 		int LAST_INDEX = 1;
 		while(1) {
-			printf("sending Strings Indexed from %d to %d\n", LAST_INDEX, LAST_INDEX + 4);
+			printf("Sending Strings Indexed from %d to %d\n", LAST_INDEX, LAST_INDEX + 4);
 			for(int i = LAST_INDEX; i < LAST_INDEX + 5; i++) {
 				RESULT = write(DATA_SOCKET, RANDOM_STRING[i], strlen(RANDOM_STRING[i]) + 1);
 				if(RESULT == -1) {
-					perror("couldn't write");
+					perror("UNABLE TO WRITE!!!");
 				}
 			}
 
@@ -87,10 +91,13 @@ int main(int Argument_Count, char* Argument[]) {
 
 			BUFF[sizeof(BUFF) - 1] = 0;
 			int FINAL_INDEX = atoi(BUFF);
-			
-			printf("MAX ID SENT BACK BY SERVER = %s\n\n", BUFF);
+			printf("--------------------------------------\n");
+			printf("MAX ID RECIEVED BY SERVER = %s\n\n", BUFF);
+			printf("--------------------------------------\n");
 			if(FINAL_INDEX == 50) {
-				printf("Successfully sent all Strings\n");
+				printf("--------------------------------------------\n");
+				printf("ALL STRINGS SENT TO CONSUMER SUCCESSFULLY!!!\n");
+				printf("--------------------------------------------\n");
 				strncpy(BUFF, "DOWN", sizeof("DOWN"));
 				write(DATA_SOCKET, BUFF, sizeof(BUFF));
 				close(DATA_SOCKET);
