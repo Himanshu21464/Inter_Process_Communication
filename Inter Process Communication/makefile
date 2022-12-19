@@ -8,4 +8,4 @@ compile:
 
 
 clean: 
-	rm  P1_FIFO P2_FIFO P1_Socket P2_Socket P1_Shared_Memory P2_Shared_Memory
+	rm  P1_FIFO P2_FIFO P1_Socket P2_Socket P1_Shared_Memory P2_Shared_Memory SOCKET_1.socket
