@@ -3,9 +3,12 @@
 #include <linux/sched/signal.h>
 #include<linux/string.h>
 
+
 char *process_name="systemd";
 
 module_param(process_name,charp,S_IRUGO);
+
+
 
 static int tasks_init(void){
     struct task_struct *process;    
@@ -17,9 +20,9 @@ static int tasks_init(void){
         printk(KERN_INFO "Process ID       : %d",process->pid);
         printk(KERN_INFO "User ID          : %d",process->cred->uid);
         printk(KERN_INFO "Process Group ID : %d",process->cred->gid);
-        //printk(KERN_INFO "Command Path     : %s",process->cdir);
-        }else{
-            continue;
+        printk(KERN_INFO "\n");
+        //printk(KERN_INFO "Command Path     : %s",get_cmdline(process_name));
+        return 0;
         }
          
     }
