@@ -86,7 +86,10 @@ int main(int Argument_Count, char *Argument[]) {
 				RESULT = write(DATA_SOCKET, BUFF, sizeof(BUFF));
 			}	
 
-			if(CURRENT_INDEX >= 50) break;
+			if(CURRENT_INDEX >= 50) {
+				exit(EXIT_SUCCESS);
+				break;
+			}
 		}
 		
 		
