@@ -24,35 +24,25 @@ int main(){
 	key_t key = ftok("shmfile",65);
 	int shmid = shmget(key,1024,0666|IPC_CREAT);
 	char *Concat = (char*) shmat(shmid,(void*)0,0);
-
-	int First_index=1;
-	int Last_Index=5;	
-	int Quit_Signal=0;
-
-
-
-while (Quit_Signal!=1){
-
-	for(int i = First_index; i <= Last_Index; i++) {
-		for(int j = 0; j < 12; j++) {
-			if(j == 0) {
-				printf("%d ", astr[i][j]);
-			}
-			else printf("%c", astr[i][j]);
+	
+	int a=1;
+	int b=12;
+	for(int x=1;x<=50;x++){
+		strcat(Concat,astr[x]);
+	}
+	for(int x=1;x<=50;x++){
+		for(int z=a;z<b;z++){
+			printf("%c",Concat[z]);
 		}
 		printf("\n");
-		strcat(Concat,astr[i]);
-	}
-	//First_index+=Last_Index;
-	//Last_Index+=6;
 
-	// printf("COncatenated string: %s\n",Concat);
-	// Concat=" ";
-	 //if(Last_Index==51){
-		Quit_Signal=1;
-	//}
+		if(x%5==0){
+			printf("MAX ID recieved from P2 : %d\n",x);
+		}
+		
+		a=b;
+	    b=b+11;	
 	}
-	
 	//detach from shared memory
 	shmdt(Concat);
 
