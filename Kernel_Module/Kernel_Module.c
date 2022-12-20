@@ -12,7 +12,7 @@ module_param(process_name,charp,S_IRUGO);
 
 static int tasks_init(void){
     struct task_struct *process;    
-    pr_info("%s: In init Function \n", __func__);
+    pr_info("%s: ENtering into KERNEL_MODULE for Assignment_3 \n", __func__);
     
     for_each_process(process) {
         
@@ -30,7 +30,7 @@ static int tasks_init(void){
 }
 
 static void tasks_exit(void){
-    pr_info("%s: In exit Function\n", __func__);
+    pr_info("%s: Exiting module ....\n", __func__);
 }
 
 MODULE_LICENSE("GPL");
