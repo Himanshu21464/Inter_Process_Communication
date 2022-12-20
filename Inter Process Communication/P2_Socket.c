@@ -89,6 +89,7 @@ int main(int Argument_Count, char *Argument[]) {
 			if(CURRENT_INDEX >= 50) {
 				exit(EXIT_SUCCESS);
 				break;
+		
 			}
 		}
 		
