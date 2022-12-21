@@ -22,6 +22,12 @@ void Get_Random_String(char Random_Strings[][12]) {
 	}
 }
 
+void time_Cal(long Start){
+	long End=clock();
+	long final=End-Start;
+	printf("Time: %ld\n",final);
+}
+
 int main() {
     int F_A, F_B;
 
@@ -51,6 +57,7 @@ int main() {
 
 
 	int END_INDEX = 1;
+	long Start=clock();
 	while(1) {
 		if(F_A == -1) {
 			perror("Couldn't access FIFO1");
@@ -78,6 +85,7 @@ int main() {
  		printf("MAX ID SENT BACK BY SERVER = %s\n\n", BUFFER);
 		END_INDEX = FINAL_INDEX + 1;
 		if(END_INDEX >= 50){
+			time_Cal(Start);
 			exit(EXIT_SUCCESS);
 		}
 	}
