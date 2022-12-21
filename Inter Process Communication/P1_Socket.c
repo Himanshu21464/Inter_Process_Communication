@@ -22,6 +22,12 @@ void GENERATE_RANDOM_STRING(char RANDOM_STRINGS[][12]) {
 	}
 }
 
+void time_cal(long start){
+	long end=clock();
+	long final=end-start;
+	printf("Time : %ld\n",final);
+}
+
 int main(int Argument_Count, char* Argument[]) {
 	struct sockaddr_un ADDRESS;
 	int RESULT;
@@ -73,6 +79,7 @@ int main(int Argument_Count, char* Argument[]) {
 	}
 	else {
 		int LAST_INDEX = 1;
+		long start=clock();
 		while(1) {
 			printf("Sending Strings Indexed from %d to %d\n", LAST_INDEX, LAST_INDEX + 4);
 			for(int i = LAST_INDEX; i < LAST_INDEX + 5; i++) {
@@ -101,6 +108,7 @@ int main(int Argument_Count, char* Argument[]) {
 				strncpy(BUFF, "DOWN", sizeof("DOWN"));
 				write(DATA_SOCKET, BUFF, sizeof(BUFF));
 				close(DATA_SOCKET);
+				time_cal(start);
 				exit(EXIT_SUCCESS);
 				break;
 			}
