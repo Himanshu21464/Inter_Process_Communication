@@ -2,26 +2,35 @@
 #include <linux/module.h>
 #include <linux/sched/signal.h>
 #include<linux/string.h>
+#include <linux/path.h>
 
 
-char *process_name="systemd";
+int id=1;
 
-module_param(process_name,charp,S_IRUGO);
+module_param(id,int,S_IRUGO);
 
 
 
 static int tasks_init(void){
-    struct task_struct *process;    
+    struct task_struct *process; 
+    struct path *path;
+    char *command_path;
+
     pr_info("%s: ENtering into KERNEL_MODULE for Assignment_3 \n", __func__);
     
     for_each_process(process) {
+
         
-        if(strcmp(process->comm,process_name)==0){
+        if(process->pid==id){
+        //get_task_comm(command_path, task);
+        //get_task_exe_path(task, &path);
+        //d_path(&path->dentry, &path->mnt, command_path, PATH_MAX);
         printk(KERN_INFO "Process ID       : %d",process->pid);
         printk(KERN_INFO "User ID          : %d",process->cred->uid);
         printk(KERN_INFO "Process Group ID : %d",process->cred->gid);
+        printk(KERN_INFO "Command Path     : %s",process->comm);
+        
         printk(KERN_INFO "\n");
-        //printk(KERN_INFO "Command Path     : %s",get_cmdline(process_name));
         return 0;
         }
          
