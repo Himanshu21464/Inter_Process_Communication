@@ -1,24 +1,11 @@
 --------------------------KERNEL MODULE ---------------------------------
 
-This kernel module is created by implementing a kernel syscall as a module in which it prints the PID,UID,PGID and command path of a given process (via command line argument passing)
-
-TO compile this kernel modules we have created a makefile in which following commands run to compile the given kernel module:-
-
-obj-m+=kmodule.o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+This kernel module have three functions:-
+  1. init function
+  2. exit function
+  3. module_param
   
+ Task_Init function : This function is the most important function in this module. In this function, it rints the PID,UID,GID and command path for a given process.
+ Exit Function : This function print a exiting message after removing the module (unloading the module).
+ module_param() : function is used to take input from user via command line.
   
-  * After that we need to insert this module into our kernel to make it work by the following command:-
- 
-    "sudo insmod kmodule.ko "
-    
-   * TO remove/unload  the module :-
-   
-   "sudo rmmod kmodule.ko"
-   
-    
-    
