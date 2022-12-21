@@ -35,4 +35,4 @@ static void tasks_exit(void){
 
 MODULE_LICENSE("GPL");
 module_init(tasks_init);
-module_exit(tasks_exit)
+module_exit(tasks_exit);
